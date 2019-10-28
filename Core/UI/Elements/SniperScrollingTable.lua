@@ -11,6 +11,11 @@
 -- @{AuctionScrollingTable} class.
 -- @classmod SniperScrollingTable
 
+-- ahbot
+print("reuqire")
+print("reuqire")
+print("reuqire")
+
 local _, TSM = ...
 local SniperScrollingTable = TSM.Lib.Class.DefineClass("SniperScrollingTable", TSM.UI.ShoppingScrollingTable)
 TSM.UI.SniperScrollingTable = SniperScrollingTable
@@ -104,7 +109,41 @@ function SniperScrollingTable._GetTableRow(self, isHeader)
 	return row
 end
 
+-- ahbot
+local function dump (  value , call_indent)
+	if not call_indent then 
+		call_indent = ""
+	end
+
+	local indent = call_indent .. "  "
+
+	local output = ""
+
+	if type(value) == "table" then
+		output = output .. "{"
+		local first = true
+		for inner_key, inner_value in pairs ( value ) do
+			if not first then 
+			output = output .. ", "
+			else
+			first = false
+			end
+			output = output .. "\n" .. indent
+			output = output  .. inner_key .. " = " .. dump ( inner_value, indent ) 
+		end
+		output = output ..  "\n" .. call_indent .. "}"
+
+	elseif type (value) == "userdata" then
+		output = "userdata"
+	else 
+		output =  value
+	end
+	return output 
+end
+-- ahbot
+
 function SniperScrollingTable._SetRowData(self, row, data)
+	-- print("trace step SniperScrollingTable._SetRowData")
 	-- print(type(row))
 
 	-- for key,value in pairs(row) do 
@@ -113,6 +152,13 @@ function SniperScrollingTable._SetRowData(self, row, data)
 
 	local record = self._baseRecordByHash[data]
 	local isRecent = self._highestFilterId == record:GetField("filterId")
+	print("ahbot trace");
+	print("record", type(record), record)
+	pprint(record)
+	print("row",  type(row), row)
+	
+	print("data",  type(data), data)
+	error("ahbot err")
 	TSM.UI.TexturePacks.SetTexture(row._icons.remove, isRecent and "iconPack.14x14/New" or "iconPack.14x14/Close/Default")
 	self.__super:_SetRowData(row, data)
 end
