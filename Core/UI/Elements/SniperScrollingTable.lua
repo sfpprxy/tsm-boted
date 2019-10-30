@@ -105,29 +105,9 @@ function SniperScrollingTable._GetTableRow(self, isHeader)
 end
 
 function SniperScrollingTable._SetRowData(self, row, data)
-	print("trace step SniperScrollingTable._SetRowData")
-
+--	print("ahbot stub SniperScrollingTable._SetRowData")
 	local record = self._baseRecordByHash[data]
 	local isRecent = self._highestFilterId == record:GetField("filterId")
-    -- todo figure out output
-	print("ahbot trace");
-
-    print("=====================================================")
-	print("record", type(record), record)
---	lt(record)
-
-    print("=====================================================")
-	print("row",  type(row), row)
---	lt(row)
-
-    print("=====================================================")
-	print("data",  type(data), data)
-    -- data string [物品名称]~10123(竞拍价)~0~12184(一口价)~0~玩家~3(可能是index)~1(堆叠中的数量)~false
---	lt(data)
-
-    print("TRACE STEP =====================================================")
---	error("ahbot err")
-
 	TSM.UI.TexturePacks.SetTexture(row._icons.remove, isRecent and "iconPack.14x14/New" or "iconPack.14x14/Close/Default")
 	self.__super:_SetRowData(row, data)
 end
@@ -171,11 +151,4 @@ function private.RemoveRowBtnOnClick(button)
 	if scrollingTable._onRowRemovedHandler then
 		scrollingTable:_onRowRemovedHandler(scrollingTable._baseRecordByHash[self:GetData()])
 	end
-end
-
-function lt(t)
-    for k, v in pairs(t)
-    do
-        print(k, type(v) ,v)
-    end
 end
