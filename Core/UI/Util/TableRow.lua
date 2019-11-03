@@ -503,7 +503,7 @@ function private.RowOnClick(frame, mouseButton)
 	local self = private.rowFrameLookup[frame]
 	if mouseButton == "LeftButton" and not self._scrollingTable._selectionDisabled then
 		self._scrollingTable:SetSelection(self:GetData())
-		print("ahbot stub RowOnClick data ->", self:GetData())
+--      print("ahbot stub RowOnClick data ->", self:GetData())
 	end
 	self._scrollingTable:_HandleRowClick(self:GetData(), mouseButton)
 end
