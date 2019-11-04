@@ -486,7 +486,7 @@ function TSM.OnInitialize()
 	end
 
 	-- module price sources
-	TSM.CustomPrice.RegisterSource("Accounting", "avgSell", L["Avg Sell Price"], TSM.Accounting.Transactions.GetAverageSalePrice)
+	TSM.CustomPrice.RegisterSource("Accounting", "stock", "库存", TSMAPI_FOUR.Inventory.GetTotalQuantity)
 	TSM.CustomPrice.RegisterSource("Accounting", "avgSell", L["Avg Sell Price"], TSM.Accounting.Transactions.GetAverageSalePrice)
 	TSM.CustomPrice.RegisterSource("Accounting", "maxSell", L["Max Sell Price"], TSM.Accounting.Transactions.GetMaxSalePrice)
 	TSM.CustomPrice.RegisterSource("Accounting", "minSell", L["Min Sell Price"], TSM.Accounting.Transactions.GetMinSalePrice)
