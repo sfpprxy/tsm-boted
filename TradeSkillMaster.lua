@@ -482,7 +482,10 @@ function TSM.OnInitialize()
 			return info and info[arg] or nil
 		end
 		TSM.CustomPrice.RegisterSource("External", "AHDBMinBuyout", L["AHDB Minimum Buyout"], GetAHDBPrice, true, "minBuyout")
-		TSM.CustomPrice.RegisterSource("External", "AHDBMinBid", L["AHDB Minimum Bid"], GetAHDBPrice, true, "minBid")
+        TSM.CustomPrice.RegisterSource("External", "AHDBMinBid", L["AHDB Minimum Bid"], GetAHDBPrice, true, "minBid")
+		TSM.CustomPrice.RegisterSource("External", "market3", "3日均价", GetAHDBPrice, true, "market3")
+		TSM.CustomPrice.RegisterSource("External", "market14", "14日均价", GetAHDBPrice, true, "market14")
+		TSM.CustomPrice.RegisterSource("External", "maxStock", "最大仓储", GetAHDBPrice, true, "maxStock")
 	end
 
 	-- module price sources
@@ -838,3 +841,5 @@ function TSM.GetTSMProfileIterator()
 		TSM.db:SetProfile(originalProfile)
 	end
 end
+
+-- function pt(t) for k, v in pairs(t) do print(k, type(v) ,v) end end
