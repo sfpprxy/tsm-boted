@@ -481,15 +481,18 @@ function TSM.OnInitialize()
 			local info = AuctionDB:AHGetAuctionInfoByLink(itemLink)
 			return info and info[arg] or nil
 		end
-		TSM.CustomPrice.RegisterSource("External", "AHDBMinBuyout", L["AHDB Minimum Buyout"], GetAHDBPrice, true, "minBuyout")
-        TSM.CustomPrice.RegisterSource("External", "AHDBMinBid", L["AHDB Minimum Bid"], GetAHDBPrice, true, "minBid")
-		TSM.CustomPrice.RegisterSource("External", "market3", "3日均价", GetAHDBPrice, true, "market3")
-		TSM.CustomPrice.RegisterSource("External", "market14", "14日均价", GetAHDBPrice, true, "market14")
+		TSM.CustomPrice.RegisterSource("External", "vIndex", "价值指数", GetAHDBPrice, true, "vIndex")
 		TSM.CustomPrice.RegisterSource("External", "maxStock", "最大仓储", GetAHDBPrice, true, "maxStock")
+		TSM.CustomPrice.RegisterSource("External", "market", "14日市场价", GetAHDBPrice, true, "market")
+		TSM.CustomPrice.RegisterSource("External", "marketD", "14日标准差", GetAHDBPrice, true, "marketD")
+		TSM.CustomPrice.RegisterSource("External", "auctions", "14日拍卖件数", GetAHDBPrice, true, "auctions")
+		TSM.CustomPrice.RegisterSource("External", "qty", "14日拍卖总量", GetAHDBPrice, true, "qty")
+		TSM.CustomPrice.RegisterSource("External", "itemClass", "大类", GetAHDBPrice, true, "itemClass")
+		TSM.CustomPrice.RegisterSource("External", "subClass", "子类", GetAHDBPrice, true, "subClass")
 	end
 
 	-- module price sources
-	TSM.CustomPrice.RegisterSource("Accounting", "stock", "库存", TSMAPI_FOUR.Inventory.GetTotalQuantity)
+	TSM.CustomPrice.RegisterSource("Accounting", "stock", "当前库存", TSMAPI_FOUR.Inventory.GetTotalQuantity)
 	TSM.CustomPrice.RegisterSource("Accounting", "avgSell", L["Avg Sell Price"], TSM.Accounting.Transactions.GetAverageSalePrice)
 	TSM.CustomPrice.RegisterSource("Accounting", "maxSell", L["Max Sell Price"], TSM.Accounting.Transactions.GetMaxSalePrice)
 	TSM.CustomPrice.RegisterSource("Accounting", "minSell", L["Min Sell Price"], TSM.Accounting.Transactions.GetMinSalePrice)
