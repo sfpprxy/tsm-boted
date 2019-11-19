@@ -36,13 +36,14 @@ function TableRow.__init(self)
 	-- ahbot hack - keyboard to mouse click
 	frame:RegisterEvent("MODIFIER_STATE_CHANGED");
 	frame:SetScript("OnEvent", function(self, ...)
---		print("ahbot stub keyboard to mouse click")
 		local key, pressed = ...
-		if IsShiftKeyDown() and IsControlKeyDown() and IsAltKeyDown() then
+		if IsShiftKeyDown() and IsAltKeyDown() then
 			local rowFrame = private.rowFrameLookup[self]
-			local s = rowFrame._rowData
-			if not (s == nil or s == "") then
-				private.RowOnClick(self, "LeftButton")
+			if rowFrame and rowFrame._scrollingTable and tostring(rowFrame._scrollingTable.__class) == "class:SniperScrollingTable" then
+				local s = rowFrame._rowData
+				if not (s == nil or s == "") then
+					private.RowOnClick(self, "LeftButton")
+				end
 			end
 		end
 	end)
