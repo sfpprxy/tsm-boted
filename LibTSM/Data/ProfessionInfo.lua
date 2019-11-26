@@ -19,8 +19,8 @@ local PROFESSION_NAMES = {
 	Mining = GetSpellInfo(2575),
 	Smelting = GetSpellInfo(2656),
 	Poisons = GetSpellInfo(2842),
-	Herbalism = GetSpellInfo(170691),
-	HerbalismSkills = GetSpellInfo(193290),
+	Herbalism = GetSpellInfo(11993),
+	HerbalismSkills = GetSpellInfo(11611),
 	Skinning = GetSpellInfo(8613),
 	SkinningSkills = GetSpellInfo(194174),
 }
@@ -584,6 +584,7 @@ local ENCHANTING_RECIPIES = {
 -- ============================================================================
 
 function ProfessionInfo.GetName(key)
+	-- this should be fixed by tsm team, PROFESSION_NAMES invaild
 	local name = PROFESSION_NAMES[key]
 	assert(name)
 	return name
