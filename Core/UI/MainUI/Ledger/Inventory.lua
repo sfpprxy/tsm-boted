@@ -310,7 +310,7 @@ function private.GetTotalValue()
 		local auctions = info.auctions or 0
 		local rate = math.floor(total / maxStock * 100)
 		if rate > 70 and vIndex > 6 and auctions > 12 then
-			print("即将满仓"..rate.."%: "..itemLink, total, maxStock)
+			print("高仓位"..rate.."%: "..itemLink, total, maxStock)
 		end
 		-- ahbot
 		itemQuantities[itemString] = total
