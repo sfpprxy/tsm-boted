@@ -301,6 +301,18 @@ function private.GetTotalValue()
 	local itemQuantities = TSM.TempTable.Acquire()
 	for _, row in private.query:Iterator() do
 		local itemString, total = row:GetFields("itemString", "totalQuantity")
+		-- ahbot
+		local wowItemString = TSMAPI_FOUR.Item.ToWowItemString(itemString)
+		local itemLink = TSM_API.GetItemLink(itemString)
+		local info = AuctionDB:AHGetAuctionInfoByLink(itemLink)
+		local maxStock = info.maxStock or 0
+		local vIndex = info.vIndex or 0
+		local auctions = info.auctions or 0
+		local rate = math.floor(total / maxStock * 100)
+		if rate > 70 and vIndex > 6 and auctions > 12 then
+			print("即将满仓"..rate.."%: "..itemLink, total, maxStock)
+		end
+		-- ahbot
 		itemQuantities[itemString] = total
 	end
 	local totalValue = 0
