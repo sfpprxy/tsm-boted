@@ -74,7 +74,8 @@ function private.GetSelectionFrame()
 			:SetLayout("HORIZONTAL")
 			:SetStyle("height", 26)
 			:AddChild(TSMAPI_FOUR.UI.NewElement("Spacer", "leftSpacer"))
-			:AddChild(TSMAPI_FOUR.UI.NewElement("ActionButton", "buyoutScanBtn")
+			-- ahbot hack
+			:AddChild(TSMAPI_FOUR.UI.NewNamedElement("ActionButton", "buyoutScanBtn", "TSMStartSniperBtn")
 				:SetStyle("margin", { right = 24 })
 				:SetStyle("width", 200)
 				:SetText(L["Run Buyout Sniper"])
@@ -231,6 +232,7 @@ function private.BidScanButtonOnClick(button)
 end
 
 function private.AuctionsOnSelectionChanged()
+	--	print("ahbot stub AuctionsOnSelectionChanged")
 	private.fsm:ProcessEvent("EV_AUCTION_SELECTION_CHANGED")
 end
 
@@ -466,6 +468,7 @@ function private.FSMCreate()
 				return "ST_INIT"
 			end)
 			:AddEvent("EV_AUCTION_SELECTION_CHANGED", function(context)
+				-- print("ahbot stub EV_AUCTION_SELECTION_CHANGED")
 				assert(context.scanFrame)
 				if context.scanFrame:GetElement("auctions"):GetSelectedRecord() then
 					-- the user selected something, so cancel the current scan

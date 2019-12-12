@@ -35,6 +35,24 @@ function TableRow.__init(self)
 
 	local frame = CreateFrame("Button", nil, nil, nil)
 	frame:RegisterForClicks("LeftButtonUp", "RightButtonUp")
+
+	-- ============================================================================
+	-- ahbot hack - keyboard to mouse click
+	frame:RegisterEvent("MODIFIER_STATE_CHANGED");
+	frame:SetScript("OnEvent", function(self, ...)
+		local key, pressed = ...
+			if IsShiftKeyDown() and IsAltKeyDown() then
+			local rowFrame = private.rowFrameLookup[self]
+				if rowFrame and rowFrame._scrollingTable and tostring(rowFrame._scrollingTable.__class) == "class:SniperScrollingTable" then
+				local s = rowFrame._rowData
+					if not (s == nil or s == "") then
+					private.RowOnClick(self, "LeftButton")
+				end
+			end
+		end
+	end)
+	-- ============================================================================
+
 	self._frame = frame
 	private.rowFrameLookup[frame] = self
 
@@ -490,6 +508,7 @@ function private.RowOnClick(frame, mouseButton)
 	local self = private.rowFrameLookup[frame]
 	if mouseButton == "LeftButton" and not self._scrollingTable._selectionDisabled then
 		self._scrollingTable:SetSelection(self:GetData())
+		-- print("ahbot stub RowOnClick data ->", self:GetData())
 	end
 	self._scrollingTable:_HandleRowClick(self:GetData(), mouseButton)
 end
