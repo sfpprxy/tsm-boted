@@ -521,7 +521,7 @@ function private.OnAuctionHouseShow()
 		timeout = 0,
 		whileDead = true,
 	}
-	TSM.Wow.ShowStaticPopupDialog("TSM_AUCTIONDB_SCAN")
+	--TSM.Wow.ShowStaticPopupDialog("TSM_AUCTIONDB_SCAN")
 end
 
 function private.OnAuctionHouseClosed()

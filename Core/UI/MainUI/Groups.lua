@@ -663,6 +663,8 @@ local function GroupedMoreDialogRowIterator(_, prevIndex)
 		return 1, L["Select All Items"], private.GroupedSelectAllBtnOnClick
 	elseif prevIndex == 1 then
 		return 2, L["Deselect All Items"], private.GroupedDeselectAllBtnOnClick
+	elseif prevIndex == 2 then
+		return 3, "手动添加物品ID", private.GroupedManuallyAddItemBtnOnClick
 	end
 end
 
@@ -681,6 +683,45 @@ function private.GroupedDeselectAllBtnOnClick(button)
 	baseFrame:GetElement("content.groups.content.buttons.items.content.grouped.content.itemList"):ClearSelection()
 	baseFrame:HideDialog()
 end
+
+function private.GroupedManuallyAddItemBtnOnClick(button)
+	local baseFrame = button:GetBaseElement()
+	baseFrame:HideDialog()
+	local frame = TSMAPI_FOUR.UI.NewElement("Frame", "frame")
+		:SetLayout("VERTICAL")
+		:SetStyle("width", 200)
+		:SetStyle("height", 24)
+		:SetStyle("anchors", { { "CENTER" } })
+		:SetStyle("background", "#2e2e2e")
+		:SetStyle("border", "#e2e2e2")
+		:SetStyle("borderSize", 1)
+		:AddChild(TSMAPI_FOUR.UI.NewElement("Input", "keywordInput")
+			:SetStyle("margin", { left = 8, right = 8 })
+			:SetStyle("background", "#585858")
+			:SetStyle("border", "#9d9d9d")
+			:SetStyle("borderSize", 2)
+			:SetStyle("textColor", "#e2e2e2")
+			:SetStyle("hintTextColor", "#e2e2e2")
+			:SetStyle("justifyH", "LEFT")
+			:SetStyle("hintJustifyH", "LEFT")
+			:SetFocused(true)
+			:SetScript("OnEnterPressed", private.onItemIdEntered)
+		)
+	baseFrame:ShowDialogFrame(frame)
+end
+function private.onItemIdEntered(input)
+	local frame = input:GetElement("__parent")
+	local text = input:GetText()
+	local itemString = "i:"..text;
+	TSM.Groups.SetItemGroup(itemString, private.currentGroupPath)
+
+	local parentFrame = frame:GetBaseElement();
+	parentFrame:HideDialog()
+	local itemList = parentFrame:GetElement("content.groups.content.buttons.items.content.grouped.content.itemList")
+	itemList:SetItems(private.GetGroupedItemList(), true)
+	local otherItemList = parentFrame:GetElement("content.groups.content.buttons.items.content.ungrouped.content.itemList")
+	otherItemList:SetItems(private.GetUngroupedItemList(), true)
+end 
 
 function private.GroupedItemsOnSelectionChanged(self, numSelected)
 	local button = self:GetElement("__parent.__parent.btn")
