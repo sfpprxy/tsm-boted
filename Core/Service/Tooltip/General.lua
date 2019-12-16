@@ -30,9 +30,9 @@ function General.LoadTooltip(tooltip, itemString)
 		if groupPath ~= TSM.CONST.ROOT_GROUP_PATH then
 			local leftText = nil
 			if TSM.Groups.IsItemInGroup(itemString) then
-				leftText = GROUP
+				leftText = "分组"
 			else
-				leftText = GROUP.."("..L["Base Item"]..")"
+				leftText = "分组".."("..L["Base Item"]..")"
 			end
 			tooltip:AddLine(leftText, "|cffffffff"..TSM.Groups.Path.Format(groupPath).."|r")
 			for _, moduleName in TSM.Operations.ModuleIterator() do
