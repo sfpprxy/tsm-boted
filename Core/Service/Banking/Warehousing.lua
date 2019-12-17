@@ -33,6 +33,15 @@ function Warehousing.MoveGroupsToBags(callback, groups)
 	TempTable.Release(items)
 end
 
+-- ahbot StackGroupsToBank
+function Warehousing.StackGroupsToBank(callback, groups)
+	local items = TempTable.Acquire()
+	TSM.Banking.Util.PopulateGroupItemsFromBagsMoreThanStack(items, groups, private.GetNumToMoveToBank)
+	TSM.Banking.MoveToBank(items, callback)
+	TempTable.Release(items)
+end
+-- ahbot
+
 function Warehousing.RestockBags(callback, groups)
 	local items = TempTable.Acquire()
 	TSM.Banking.Util.PopulateGroupItemsFromOpenBank(items, groups, private.GetNumToMoveRestock)

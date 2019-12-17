@@ -74,6 +74,27 @@ function Util.PopulateGroupItemsFromBags(items, groups, getNumFunc, ...)
 	TempTable.Release(itemQuantity)
 end
 
+-- ahbot
+function Util.PopulateGroupItemsFromBagsMoreThanStack(items, groups, getNumFunc, ...)
+	local itemQuantity = TempTable.Acquire()
+	for _, _, _, itemString, quantity in Util.BagIterator(true) do
+		if private.InGroups(itemString, groups) then
+			itemQuantity[itemString] = (itemQuantity[itemString] or 0) + quantity
+		end
+	end
+	for itemString, numHave in pairs(itemQuantity) do
+		local numToMove = getNumFunc(itemString, numHave, ...)
+		if numToMove > 0 then
+			numToMove = numToMove % 10
+			-- local itemLink = TSM_API.GetItemLink(itemString)
+			-- print("ahbot stub numToMove", itemLink, numToMove)
+			items[itemString] = numToMove
+		end
+	end
+	TempTable.Release(itemQuantity)
+end
+-- ahbot
+
 function Util.PopulateGroupItemsFromOpenBank(items, groups, getNumFunc, ...)
 	local itemQuantity = TempTable.Acquire()
 	for _, _, _, itemString, quantity in Util.OpenBankIterator(true) do
