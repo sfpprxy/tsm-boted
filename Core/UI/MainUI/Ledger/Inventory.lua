@@ -47,6 +47,7 @@ function Inventory.OnEnable()
 		:AddUniqueStringField("itemString")
 		:Commit()
 	private.query = private.db:NewQuery()
+		:VirtualField("stock", "number", private.StockVirtualField)
 		:VirtualField("bagQuantity", "number", private.BagQuantityVirtualField)
 		:VirtualField("guildQuantity", "number", private.GuildQuantityVirtualField)
 		:VirtualField("auctionQuantity", "number", private.AuctionQuantityVirtualField)
@@ -210,6 +211,15 @@ function private.DrawInventoryPage()
 						:SetTextInfo("totalQuantity")
 						:SetSortInfo("totalQuantity")
 						:Commit()
+					:NewColumn("stock")
+						:SetTitles("仓位%")
+						:SetWidth(60)
+						:SetFont(TSM.UI.Fonts.FRIZQT)
+						:SetFontHeight(12)
+						:SetJustifyH("RIGHT")
+						:SetTextInfo("stock")
+						:SetSortInfo("stock")
+						:Commit()
 					:NewColumn("bags")
 						:SetTitles(L["Bags"])
 						:SetWidth(60)
@@ -326,6 +336,24 @@ function private.CheckCustomPrice(value)
 	end
 end
 
+-- ahbot
+function private.StockVirtualField(row)
+	local itemString, total = row:GetFields("itemString", "totalQuantity")
+	-- local wowItemString = TSMAPI_FOUR.Item.ToWowItemString(itemString)
+	local itemLink = TSM_API.GetItemLink(itemString)
+	local info = AuctionDB:AHGetAuctionInfoByLink(itemLink)
+	local maxStock = info.maxStock or 0
+	local vIndex = info.vIndex or 0
+	local auctions = info.auctions or 0
+	local rate = 0
+	if vIndex > 6 and auctions > 10 then
+		rate = math.floor(total / maxStock * 100)
+		-- print("高仓位"..rate.."%: "..itemLink, total, maxStock)
+	end
+	return rate
+end
+-- ahbot
+
 function private.BagQuantityVirtualField(row)
 	return BagTracking.GetBagsQuantityByBaseItemString(row:GetField("itemString"))
 end
@@ -372,18 +400,6 @@ function private.GetTotalValue()
 	local itemQuantities = TempTable.Acquire()
 	for _, row in private.query:Iterator() do
 		local itemString, total = row:GetFields("itemString", "totalQuantity")
-		-- ahbot
-		-- local wowItemString = TSMAPI_FOUR.Item.ToWowItemString(itemString)
-		local itemLink = TSM_API.GetItemLink(itemString)
-		local info = AuctionDB:AHGetAuctionInfoByLink(itemLink)
-		local maxStock = info.maxStock or 0
-		local vIndex = info.vIndex or 0
-		local auctions = info.auctions or 0
-		local rate = math.floor(total / maxStock * 100)
-		if rate > 70 and vIndex > 6 and auctions > 12 then
-			print("高仓位"..rate.."%: "..itemLink, total, maxStock)
-		end
-		-- ahbot
 		itemQuantities[itemString] = total
 	end
 	local totalValue = 0
