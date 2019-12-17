@@ -47,7 +47,10 @@ function Inventory.OnEnable()
 		:AddUniqueStringField("itemString")
 		:Commit()
 	private.query = private.db:NewQuery()
-		:VirtualField("stock", "number", private.StockVirtualField)
+        -- ahbot
+        :VirtualField("stock", "number", private.StockVirtualField)
+        :VirtualField("market", "number", private.MarketVirtualField)
+        :VirtualField("rate", "number", private.RateVirtualField)
 		:VirtualField("bagQuantity", "number", private.BagQuantityVirtualField)
 		:VirtualField("guildQuantity", "number", private.GuildQuantityVirtualField)
 		:VirtualField("auctionQuantity", "number", private.AuctionQuantityVirtualField)
@@ -213,16 +216,34 @@ function private.DrawInventoryPage()
 						:Commit()
 					:NewColumn("stock")
 						:SetTitles("仓位%")
-						:SetWidth(60)
+						:SetWidth(50)
 						:SetFont(TSM.UI.Fonts.FRIZQT)
 						:SetFontHeight(12)
 						:SetJustifyH("RIGHT")
 						:SetTextInfo("stock")
 						:SetSortInfo("stock")
 						:Commit()
+                    :NewColumn("market")
+                        :SetTitles("浮动值")
+                        :SetWidth(80)
+                        :SetFont(TSM.UI.Fonts.FRIZQT)
+                        :SetFontHeight(12)
+                        :SetJustifyH("RIGHT")
+                        :SetTextInfo("market", private.TableGetMarketText)
+                        :SetSortInfo("market")
+                        :Commit()
+                    :NewColumn("rate")
+                        :SetTitles("浮动%")
+                        :SetWidth(60)
+                        :SetFont(TSM.UI.Fonts.FRIZQT)
+                        :SetFontHeight(12)
+                        :SetJustifyH("RIGHT")
+                        :SetTextInfo("rate")
+                        :SetSortInfo("rate")
+                        :Commit()
 					:NewColumn("bags")
 						:SetTitles(L["Bags"])
-						:SetWidth(60)
+						:SetWidth(30)
 						:SetFont(TSM.UI.Fonts.FRIZQT)
 						:SetFontHeight(12)
 						:SetJustifyH("RIGHT")
@@ -231,7 +252,7 @@ function private.DrawInventoryPage()
 						:Commit()
 					:NewColumn("banks")
 						:SetTitles(L["Banks"])
-						:SetWidth(60)
+						:SetWidth(30)
 						:SetFont(TSM.UI.Fonts.FRIZQT)
 						:SetFontHeight(12)
 						:SetJustifyH("RIGHT")
@@ -240,7 +261,7 @@ function private.DrawInventoryPage()
 						:Commit()
 					:NewColumn("mail")
 						:SetTitles(L["Mail"])
-						:SetWidth(60)
+						:SetWidth(30)
 						:SetFont(TSM.UI.Fonts.FRIZQT)
 						:SetFontHeight(12)
 						:SetJustifyH("RIGHT")
@@ -249,7 +270,7 @@ function private.DrawInventoryPage()
 						:Commit()
 					:NewColumn("guildVault")
 						:SetTitles(L["GVault"])
-						:SetWidth(60)
+						:SetWidth(10)
 						:SetFont(TSM.UI.Fonts.FRIZQT)
 						:SetFontHeight(12)
 						:SetJustifyH("RIGHT")
@@ -258,7 +279,7 @@ function private.DrawInventoryPage()
 						:Commit()
 					:NewColumn("auctionHouse")
 						:SetTitles(L["AH"])
-						:SetWidth(60)
+						:SetWidth(30)
 						:SetFont(TSM.UI.Fonts.FRIZQT)
 						:SetFontHeight(12)
 						:SetJustifyH("RIGHT")
@@ -267,7 +288,7 @@ function private.DrawInventoryPage()
 						:Commit()
 					:NewColumn("totalValue")
 						:SetTitles(L["Total Value"])
-						:SetWidth(120)
+						:SetWidth(100)
 						:SetFont(TSM.UI.Fonts.FRIZQT)
 						:SetFontHeight(12)
 						:SetJustifyH("RIGHT")
@@ -320,6 +341,11 @@ function private.TableGetTotalValueText(totalValue)
 	return tostring(totalValue) == NAN_STR and "" or Money.ToString(totalValue)
 end
 
+-- ahbot
+function private.TableGetMarketText(market)
+    return tostring(market) == NAN_STR and "" or Money.ToString(market)
+end
+-- ahbot
 
 
 -- ============================================================================
@@ -349,8 +375,59 @@ function private.StockVirtualField(row)
 	if vIndex > 6 and auctions > 10 then
 		rate = math.floor(total / maxStock * 100)
 		-- print("高仓位"..rate.."%: "..itemLink, total, maxStock)
-	end
+    end
 	return rate
+end
+
+function private.MarketVirtualField(row)
+    local itemString = row:GetFields("itemString")
+    -- local wowItemString = TSMAPI_FOUR.Item.ToWowItemString(itemString)
+    local itemLink = TSM_API.GetItemLink(itemString)
+    local info = AuctionDB:AHGetAuctionInfoByLink(itemLink)
+    local market = info.market or 0
+    local maxStock = info.maxStock or 0
+    local vIndex = info.vIndex or 0
+    local auctions = info.auctions or 0
+
+    local dbmarket = CustomPrice.GetValue("dbmarket", row:GetField("itemString"))
+    if not dbmarket then
+        if vIndex > 6 then
+            print("市场无货中...", itemLink)
+        end
+        if market == 0 then
+            return -999999
+        end
+        return market
+    end
+
+    return dbmarket - market
+end
+
+function private.RateVirtualField(row)
+    local itemString = row:GetFields("itemString")
+    -- local wowItemString = TSMAPI_FOUR.Item.ToWowItemString(itemString)
+    local itemLink = TSM_API.GetItemLink(itemString)
+    local info = AuctionDB:AHGetAuctionInfoByLink(itemLink)
+    local market = info.market or 0
+    local maxStock = info.maxStock or 0
+    local vIndex = info.vIndex or 0
+    local auctions = info.auctions or 0
+
+    local dbmarket = CustomPrice.GetValue("dbmarket", row:GetField("itemString"))
+	if market == 0 then
+		return -999
+	end
+	if not dbmarket then
+        return 999
+	end
+
+	local rate = -999
+	rate = math.floor((dbmarket - market)/market * 100)
+	if rate > 999 then
+		rate = 999
+	end
+
+    return rate
 end
 -- ahbot
 
