@@ -87,6 +87,9 @@ function Util.PopulateGroupItemsFromBagsMoreThanStack(items, groups, getNumFunc,
 		local maxStack = ItemInfo.GetMaxStack(itemString)
 		local numToMove = numHave % maxStack
 		if numToMove > 0 then
+			if maxStack >= 100 and numHave < 100 then
+				numToMove = 0
+			end
 			items[itemString] = numToMove
 		end
 		-- print(TSM_API.GetItemLink(itemString), maxStack, "Have"..numHave, "move"..numToMove)
