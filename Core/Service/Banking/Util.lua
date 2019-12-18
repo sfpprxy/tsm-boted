@@ -11,6 +11,7 @@ local Util = TSM.Banking:NewPackage("Util")
 local TempTable = TSM.Include("Util.TempTable")
 local BagTracking = TSM.Include("Service.BagTracking")
 local GuildTracking = TSM.Include("Service.GuildTracking")
+local ItemInfo = TSM.Include("Service.ItemInfo")
 local private = {}
 
 
@@ -83,13 +84,12 @@ function Util.PopulateGroupItemsFromBagsMoreThanStack(items, groups, getNumFunc,
 		end
 	end
 	for itemString, numHave in pairs(itemQuantity) do
-		local numToMove = getNumFunc(itemString, numHave, ...)
+		local maxStack = ItemInfo.GetMaxStack(itemString)
+		local numToMove = numHave % maxStack
 		if numToMove > 0 then
-			numToMove = numToMove % 10
-			-- local itemLink = TSM_API.GetItemLink(itemString)
-			-- print("ahbot stub numToMove", itemLink, numToMove)
 			items[itemString] = numToMove
 		end
+		-- print(TSM_API.GetItemLink(itemString), maxStack, "Have"..numHave, "move"..numToMove)
 	end
 	TempTable.Release(itemQuantity)
 end
