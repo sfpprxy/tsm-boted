@@ -90,9 +90,27 @@ function Util.PopulateGroupItemsFromBagsMoreThanStack(items, groups, getNumFunc,
 			if maxStack >= 100 and numHave < 100 then
 				numToMove = 0
 			end
+--			print(TSM_API.GetItemLink(itemString), maxStack, "Have"..numHave, "存"..numToMove)
 			items[itemString] = numToMove
 		end
-		-- print(TSM_API.GetItemLink(itemString), maxStack, "Have"..numHave, "move"..numToMove)
+	end
+	TempTable.Release(itemQuantity)
+end
+
+function Util.PopulateGroupItemsFromOpenBankOfStack(items, groups, getNumFunc, ...)
+	local itemQuantity = TempTable.Acquire()
+	for _, _, _, itemString, quantity in Util.OpenBankIterator(true) do
+		if private.InGroups(itemString, groups) then
+			itemQuantity[itemString] = (itemQuantity[itemString] or 0) + quantity
+		end
+	end
+	for itemString, numHave in pairs(itemQuantity) do
+		local maxStack = ItemInfo.GetMaxStack(itemString)
+		local numToMove = numHave - numHave % maxStack
+		if numToMove > 0 then
+--			print(TSM_API.GetItemLink(itemString), maxStack, "Have"..numHave, "取"..numToMove)
+			items[itemString] = numToMove
+		end
 	end
 	TempTable.Release(itemQuantity)
 end
