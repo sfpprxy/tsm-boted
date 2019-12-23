@@ -81,6 +81,7 @@ function Transactions.OnInitialize()
 		:AddNumberField("bought")
 		:AddNumberField("avgBuyPrice")
 		:AddNumberField("avgResaleProfit")
+		:AddNumberField("totalResaleProfit")
 		:Commit()
 	private.baseStatsQuery = private.db:NewQuery()
 		:Select("quantity", "price")
@@ -460,7 +461,7 @@ function Transactions.UpdateSummaryData(groupFilter, typeFilter, characterFilter
 			local totalAvgSellPrice = totalSellPrice[itemString] / totalSold[itemString]
 			local totalAvgBuyPrice = totalBoughtPrice[itemString] / totalBought[itemString]
 			local profit = totalAvgSellPrice - totalAvgBuyPrice
-			private.dbSummary:BulkInsertNewRow(itemString, sold, totalAvgSellPrice, totalBought[itemString], totalAvgBuyPrice, profit)
+			private.dbSummary:BulkInsertNewRow(itemString, sold, totalAvgSellPrice, totalBought[itemString], totalAvgBuyPrice, profit, sold*profit)
 		end
 	end
 	private.dbSummary:BulkInsertEnd()
