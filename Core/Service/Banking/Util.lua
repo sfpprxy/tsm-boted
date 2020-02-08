@@ -105,7 +105,7 @@ function Util.PopulateGroupItemsFromOpenBankOfStack(items, groups, getNumFunc, .
 		end
 	end
 	for itemString, numHave in pairs(itemQuantity) do
-		local maxStack = ItemInfo.GetMaxStack(itemString)
+		local maxStack = ItemInfo.GetMaxStack(itemString) or 10
 		local numToMove = numHave - numHave % maxStack
 		if numToMove > 0 then
 --			print(TSM_API.GetItemLink(itemString), maxStack, "Have"..numHave, "取"..numToMove)
