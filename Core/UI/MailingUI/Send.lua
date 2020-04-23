@@ -398,7 +398,7 @@ function private.GetContactListFrame()
 		)
 		:AddChild(TSMAPI_FOUR.UI.NewElement("SelectionList", "list")
 			:SetStyle("width", 248)
-			:SetStyle("height", 133)
+			:SetStyle("height", 360)
 			:SetStyle("border", "#6d6d6d")
 			:SetStyle("borderSize", 1)
 			:SetStyle("rowHeight", 20)
@@ -635,7 +635,13 @@ function private.DragBoxOnItemRecieve(frame, button)
 		return
 	end
 
-	private.DatabaseNewRow(itemString, stackSize)
+	-- ahbot
+	for i = 1, (12 - private.query:Count()) do
+		private.DatabaseNewRow(itemString, stackSize)
+	end
+	local sendMail = private.frame:GetElement("footer.sendMail")
+	private.SendMail(sendMail)
+	-- ahbot
 end
 
 function private.QueryOnRowClick(scrollingTable, row, button)
@@ -1035,7 +1041,8 @@ function private.FSMCreate()
 
 	local function ClearMail(context, keepInfo, redraw)
 		if not keepInfo then
-			private.recipient = ""
+		-- ahbot
+		-- private.recipient = ""
 		end
 		private.subject = ""
 		private.body = ""
