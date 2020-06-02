@@ -27,7 +27,7 @@ local private = {
 	searchFilter = "",
 	groupList = {},
 	groupFilter = ALL,
-	valuePriceSource = "iflt(maxstock, 2, 1c, min(vendorbuy, market+change))",
+	valuePriceSource = "iflt(stock, 5, 1c, min(vendorbuy, market+change))",
 }
 local NAN = math.huge * 0
 local NAN_STR = tostring(NAN)
