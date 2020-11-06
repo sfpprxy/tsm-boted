@@ -1,0 +1,111 @@
+ChangeLog for Auction House DataBase (AHDB) by MooreaTv (moorea@ymail.com)
+
+Coming next:
+- Your input/suggestions welcome !
+- See open issues for ideas https://github.com/mooreatv/AuctionDB/issues
+
+v1.01.04 October 14th 2019
+- Add ProjectAzilroka to optional deps so it can manage our minimap icon.
+- [wip] Pickup/Use latest MoLib scrolling frame (for now just `/run AuctionDB:TableDemo()`)
+
+v1.01.03 Sept 30th 2019
+- Fix rounding issue in MoLib's :round() and improved AH info calc
+  fixes https://github.com/mooreatv/BetterVendorPrice/issues/6
+
+v1.01.02 Sept 25th 2019
+- Now (optionally) waits for seller info (you can turn it off in options for fastest scan)
+  to consider the scan complete - most of the work as usual is in MoLib.
+
+v1.00.01 Sept 11th 2019
+- Stable enough for 1.0!
+- Make the dependency on BVP optional because curseforge/twitch is broken
+- Trying to flip around retail and classic tags and default to see if it helps
+- Now use periodic yield to avoid (rare) DCs, from MoLib - should fix #23
+- Config option to not show the periodic "you can scan" chat text - Fixes #29
+
+v0.14.00 Sept 9th 2019
+- Added support for LibDBIcon / SexyMap through MoLib changes (Fixes #20)
+- Added support to disable all AHDB temporary keybindings (Fixes #21)
+v0.12.03 Sept 9th 2019
+- Adding option to hide the big button per request (Fixes #16)
+v0.12.01,.02 Sept 5th 2019
+- Re tag to get curse to pickup the dependency
+v0.12.00 Sept 5th 2019
+- Fix for #18: Raw data was fine but AH tooltip and TSM pricing info could miss the min for the first auction
+  found if it had multiple items
+v0.11.05 Aug 29th 2019
+- Don't print warning about scan not doable at every AH open (Fixed #15) 
+v0.11.04 Aug 28th 2019
+- Fixed minimap button and big button drag to move forgetting location on reload (thx Bayart for the report!)
+v0.11.03 Aug 28th 2019
+- Fix bogus "Can't scan outside of cities..."
+v0.11.02 Aug 28th 2019
+- Software is hard... Really fixed #12, #13, #14 now. Should not show button unless rested and should
+  not spam the chat periodically either
+v0.11.01 Aug 28th 2019
+- Opsa... was still starting with button shown irrespective of resting state (!) - sorry - fixed now!
+v0.11.00 Aug 27th 2019
+- No more pause/hang on classic at the end of the first scan!
+- Unlike in BfA which doesn't mind despite 100x more items, for classic we needed to not restore 
+  the item update event immediately, yet keep the UI functional even if you search after 
+  and hit enter in Name editbox for instance (still haven't found how to hide previous results
+  if you manual search first and then do a full scan but it's only cosmetically wrong in that case)
+- Fix the inital /tar -> /scan button binding
+- Detect "in combat" overlapping with start/end of resting to avoid addon blocked errors
+
+v0.10.00 Aug 27th 2019
+- Don't show the big pulsating button unless IsResting() (ie in city/inns) - Fixing Issue #12
+- Don't bind key for full scan unless at AH
+- Option to turn off the /tar auctioneer binding
+- Now works even if another addon (like aux-addon) hides the standard UI (moved ah open/close events to MoLib)
+- Also from MoLib: Bug fixes on normally shrinking auctions list 
+  (in classic unlike BfA it seems the list refreshes faster despite having fewer auctions)
+
+v0.09.02 Aug 26th 2019
+- Pick up another MoLib small fix (round to .1 copper when dividing (avoids 16.6666666 copper), 
+  coding error in 1 of the warnings)
+v0.09.01 Aug 26th 2019
+- Pick up MoLib fix with typo in classic code path that couldn't be tested until now (!) sorry!
+v0.09.00 Aug 26th 2019
+- Rebranded from short name "AuctionDB" to "AHDB" to avoid confusion with TSM's internal module of the same name
+- Now include current bid in scan DB v6 and deserialization on load.
+- (for now) Requires Better Vendor Price to display AH results information through tooltip
+- Classic is today !
+
+v0.08.00 Aug 25th 2019
+- Pickup from MoLib: itemdb version 4 (20% shorter), and a bug fix for suffixid
+- Better/more Localization strings
+
+v0.07.01 Aug 24th 2019
+(from MoLib)
+- Fixed bogus realm mismatch warning
+v0.07.00 Aug 23rd 2019
+(from MoLib:)
+- New ItemDB even more compact format 
+- Scan data also better structure: group by item and seller, 
+  now down to 1.5Mb a scan from 30Mb when I started.
+
+v0.06.00 Aug 23rd 2019
+- Pick up big AH changes in MoLib - https://github.com/mooreatv/MoLib/blob/master/ChangeLog.txt
+- Also bind IWT (so hitting it 3 times starts a scan (target, open, start scan))
+- New transparent, glowing button
+- Added shift key to prevent auto scan feature (auto scan delay is noop atm)
+
+v0.05.00 Aug 22nd 2019
+- The build now includes localization
+- bug fix: use PLAYER_REGEN_DISABLED as the event to hide our button, avoids combat error
+  (thanks humfras!)
+v0.04.00 Aug 22nd 2019
+- Now with functional auto scan as well as secure button to target, scan and reload
+- options panel controls how many newly found items should be shown in each scan
+v0.03.00 Aug 21st 2019
+- Pick up MoLib changes to split item DB and scan results yielding 30Mb -> 2Mb decrease
+ (+ couple Mb for itemDB but that's fixed cost with number of scans)
+v0.02.01 Aug 20th 2019
+- Initial functional version, click to scan
+v0.01.01 August 20th 2019
+- AH context call and key bindings (and pick up newer MoLib)
+v0.01.00 August 19th 2019
+- Options/config pane
+- initial version, created from MooreaTv/WowAddonTemplate
+./newaddon.sh 'AuctionDB' 'ADB' 'Auction House DataBase' 'AUCTIONDB' 'ahdb' 'Auction House DataBase, records DB history and offline queries, for classic and more'
